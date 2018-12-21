@@ -7,13 +7,15 @@
             "label": "Build",
             "command": "g++",
             "args": [
+                "main.cpp",
+                "Create_Dic.cpp",
                 "-g",
                 "-Wall",
                 "-std=c++11",
                 "-lm",
-                "${file}",
+                //"${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}.o"
+                "${fileDirname}/main.o"
             ],
             "windows": {
                 "args": [
