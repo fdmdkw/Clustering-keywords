@@ -36,6 +36,7 @@
         "utility": "cpp",
         "optional": "cpp",
         "string_view": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "deque": "cpp"
     }
 }

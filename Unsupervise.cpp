@@ -3,33 +3,32 @@
 #include <algorithm>
 #include <math.h>
 #include <limits.h>
+#include <time.h>
 using namespace std;
-const string File_folder("./training/training文件/");
-const string File_class_folder("./training/training文件種類/");
-const string File_classify_folder("./training/unsupervise_classify/");
 
 map<string, Term_dic> term_dic;
 vector<vector<string>> class_dic(5);
 vector<File_dic> file_dic(FILES);
 vector<Means> means(FILES);
 int TERMS;
+int FILES = 1001;
 Means meansA;
 Means meansB;
 Means meansC;
 Means meansD;
 
-void Create_Dic()
+void create_dic(bool test_file)
 {
     for(int files = 1; files < FILES; files++){
-        const string file_name = File_folder + to_string(files) + ".txt";
-        const string file_class_name = File_class_folder + to_string(files) + "a.txt";
+        string file_name;
+        if(!test_file)   // create dictionary of training files
+            file_name = Train_folder + to_string(files) + ".txt";
+        else            // create dictionary of test files
+            file_name = Test_folder + to_string(files) + ".txt";
+        
         ifstream if_name(file_name, ifstream::in);
-        ifstream if_class_name(file_class_name, ifstream::in);
         string str;
-        int Class;
         while(if_name >> str){
-            if_class_name >> Class;
-            file_dic[files].file_Class = Class;
             if(str.compare(",") == 0)
                 continue;
             // add term into term_dic
@@ -62,7 +61,6 @@ void Create_Dic()
             }
         }
         if_name.close();
-        if_class_name.close();
     }
 }
 void print_file_dic()
@@ -89,37 +87,18 @@ void print_term_dic()
         }
     }
 }
-void sort_dic()
-{
-
-}
 void k_mean()
 {
-    //cout << D << endl;
-    for(int i = 1; i < FILES; i++){
-        for(auto it = term_dic.begin(); it != term_dic.end(); it++){
-            if(file_dic[i].term_dic.find(it->first) != file_dic[i].term_dic.end()){  // found the term
-                float term_freq = file_dic[i].term_dic[it->first].freq;
-                means[i].vec.push_back(term_freq);
-            }
-            else{
-                means[i].vec.push_back(0);
-            }
-        }
-    }
-    // test means
-    /*for(int i = 1; i < FILES; i++){
-        int count = 0;
-        for(int j = 0; j < TERMS; j++){
-            count += means[i].vec[j];
-        }
-        if(count != file_dic[i].total_freq)
-            cout << "File" << i << endl;
-    }*/
-    meansA = means[13];
-    meansB = means[4];
-    meansC = means[1];
-    meansD = means[3];
+    create_means();
+    srand(time(NULL));
+    int a = rand()%(FILES - 1) + 1;
+    int b = rand()%(FILES - 1) + 1;
+    int c = rand()%(FILES - 1) + 1;
+    int d = rand()%(FILES - 1) + 1;
+    meansA = means[13];  // 13
+    meansB = means[4];   // 4
+    meansC = means[1];   // 1
+    meansD = means[3];   // 3
     
     for(int round; round < ROUND; round++){
         for(int i = 1; i < FILES; i++){
@@ -184,13 +163,32 @@ long long dist(int Class, Means &meansClass, Means &means)
     }
     return d;
 }
-void classify()
+void classify(bool test_file)
 {
-    float correct = 0;
+    float correctness = 0;
+    string file_class_name;
+    string file_classify_name;
     for(int i = 1; i < FILES; i++){
+        string file_class_name;
+        string file_classify_name;
+        if(!test_file){   // create dictionary of training files
+            file_class_name = Train_class_folder + to_string(i) + "a.txt";
+            file_classify_name = Train_classify_folder + to_string(i) + "a.txt";
+        }
+        else{
+            file_class_name = Test_classify_folder + to_string(i) + "a.txt";
+            file_classify_name = Test_classify_folder + to_string(i) + "a.txt";
+        }
+            
+        ifstream if_class_name(file_class_name, ifstream::in);
+        int FileClass;
+        if_class_name >> FileClass;
+        if_class_name.close();
+
         int Class = A;
         long long min = dist(A, meansA, means[i]);
         long long d = dist(B, meansB, means[i]);
+
         if(d < min){
             Class = B;
             min = d;
@@ -205,19 +203,37 @@ void classify()
             Class = D;
             min = d;
         }
-        if(Class == file_dic[i].file_Class){
-            correct++;
-
+        if(Class == FileClass){
+            correctness++;
         }
-        const string file_classify_name = File_classify_folder + to_string(i) + "a.txt";
+        
         ofstream of_class_name(file_classify_name, ofstream::out);
         of_class_name << Class;
         of_class_name.close();
     }
-    correct /= (FILES - 1);
-    cout << "Correctness: " << correct << endl;
-    const string file_classify_name = File_classify_folder + "correctness.txt";
-    ofstream of_class_name(file_classify_name, ofstream::out);
-    of_class_name << correct;
-    of_class_name.close();
+    correctness /= (FILES - 1);
+    cout << "Correctness: " << correctness << endl;
+}
+void create_means()
+{
+    for(int i = 1; i < FILES; i++){
+        for(auto it = term_dic.begin(); it != term_dic.end(); it++){
+            if(file_dic[i].term_dic.find(it->first) != file_dic[i].term_dic.end()){  // found the term
+                float term_freq = file_dic[i].term_dic[it->first].freq;
+                means[i].vec.push_back(term_freq);
+            }
+            else{
+                means[i].vec.push_back(0);
+            }
+        }
+    }
+    // test means
+    /*for(int i = 1; i < FILES; i++){
+        int count = 0;
+        for(int j = 0; j < TERMS; j++){
+            count += means[i].vec[j];
+        }
+        if(count != file_dic[i].total_freq)
+            cout << "File" << i << endl;
+    }*/
 }
