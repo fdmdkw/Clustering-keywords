@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 #define FILES 1001  // define files range 1~1000
-#define ROUND 100000
+#define ROUND 100
 typedef enum _class_{
     Others, A, B, C, D
 }Class;
@@ -32,11 +32,18 @@ typedef struct _means_{
 extern std::map<std::string, Term_dic> term_dic;
 extern std::vector<std::vector<std::string>> class_dic;
 extern std::vector<File_dic> file_dic;
+extern std::vector<Means> means;
+extern int TERMS;
+extern Means meansA;
+extern Means meansB;
+extern Means meansC;
+extern Means meansD;
 
-void Create_Dic(bool supervise); // true -> supervise, false -> unsupervise
+void Create_Dic();
 void print_file_dic();
 void print_term_dic();
 void sort_dic();
 void k_mean();
-double dist(int terms, int Class, vector<Means> &meansClass, vector<Means> &means);
+long long dist(int Class, Means &meansClass, Means &means);
+void classify();
 #endif

@@ -2,24 +2,34 @@
 #include <fstream>
 #include <algorithm>
 #include <math.h>
-#include <float.h>
+#include <limits.h>
 using namespace std;
 const string File_folder("./training/training文件/");
 const string File_class_folder("./training/training文件種類/");
+const string File_classify_folder("./training/unsupervise_classify/");
 
 map<string, Term_dic> term_dic;
 vector<vector<string>> class_dic(5);
 vector<File_dic> file_dic(FILES);
+vector<Means> means(FILES);
+int TERMS;
+Means meansA;
+Means meansB;
+Means meansC;
+Means meansD;
 
-void Create_Dic(bool supervise)
+void Create_Dic()
 {
     for(int files = 1; files < FILES; files++){
         const string file_name = File_folder + to_string(files) + ".txt";
         const string file_class_name = File_class_folder + to_string(files) + "a.txt";
         ifstream if_name(file_name, ifstream::in);
-        //ifstream if_name(file_class_name, ifstream::in);
+        ifstream if_class_name(file_class_name, ifstream::in);
         string str;
+        int Class;
         while(if_name >> str){
+            if_class_name >> Class;
+            file_dic[files].file_Class = Class;
             if(str.compare(",") == 0)
                 continue;
             // add term into term_dic
@@ -52,6 +62,7 @@ void Create_Dic(bool supervise)
             }
         }
         if_name.close();
+        if_class_name.close();
     }
 }
 void print_file_dic()
@@ -84,9 +95,7 @@ void sort_dic()
 }
 void k_mean()
 {
-    const int TERMS = term_dic.size();
     //cout << D << endl;
-    vector<Means> means(FILES);
     for(int i = 1; i < FILES; i++){
         for(auto it = term_dic.begin(); it != term_dic.end(); it++){
             if(file_dic[i].term_dic.find(it->first) != file_dic[i].term_dic.end()){  // found the term
@@ -107,32 +116,108 @@ void k_mean()
         if(count != file_dic[i].total_freq)
             cout << "File" << i << endl;
     }*/
-    Means meansA = means[1];
-    Means meansB = means[2];
-    Means meansC = means[3];
-    Means meansD = means[4];
+    meansA = means[13];
+    meansB = means[4];
+    meansC = means[1];
+    meansD = means[3];
     
-    double Min = DBL_MAX;
     for(int round; round < ROUND; round++){
         for(int i = 1; i < FILES; i++){
-            double a = 0;
-            double b = 0;
-            double c = 0;
-            double d = 0;
-            
             int Class = A;
-            double min = dist(TERMS, A, &meansA, &means);
-            Class = dist(TERMS, B, &meansB, &means) < min ? B : Class;
-            Class = dist(TERMS, C, &meansC, &means) < min ? C : Class;
-            Class = dist(TERMS, D, &meansD, &means) < min ? D : Class;
+            long long min = dist(A, meansA, means[i]);
+            long long d = dist(B, meansB, means[i]);
+            if(d < min){
+                Class = B;
+                min = d;
+            }
+            d = dist(C, meansC, means[i]);
+            if(d < min){
+                Class = C;
+                min = d;
+            }
+            d = dist(D, meansD, means[i]);
+            if(d < min){
+                Class = D;
+                min = d;
+            }
+            means[i].Class = Class;
+        }
+        for(int j = 0; j < TERMS; j++){
+            meansA.vec[j] = 0;
+            meansB.vec[j] = 0;
+            meansC.vec[j] = 0;
+            meansD.vec[j] = 0;
+        }
+        for(int i = 1; i < FILES; i++){
+            for(int j = 0; j < TERMS; j++){
+                if(means[i].Class == A){
+                    meansA.vec[j] += means[i].vec[j];
+                    meansA.number++;
+                }
+                if(means[i].Class == B){
+                    meansB.vec[j] += means[i].vec[j];
+                    meansB.number++;
+                }
+                if(means[i].Class == C){
+                    meansC.vec[j] += means[i].vec[j];
+                    meansC.number++;
+                }
+                if(means[i].Class == D){
+                    meansD.vec[j] += means[i].vec[j];
+                    meansD.number++;
+                }
+            }
+        }
+        for(int i = 0; i < TERMS; i++){
+            meansA.vec[i] /= meansA.number;
+            meansB.vec[i] /= meansB.number;
+            meansC.vec[i] /= meansC.number;
+            meansD.vec[i] /= meansD.number;
         }
     }
 }
-double dist(int terms, int Class, vector<Means> &meansClass, vector<Means> &means)
+long long dist(int Class, Means &meansClass, Means &means)
 {
-    for(int j = 1; j < FILES; j++){
-        for(int i = 0; i < terms; i++){
-            means[i].
-        }
+    long long d = 0;
+    for(int i = 0; i < TERMS; i++){
+        d += (long long)pow(means.vec[i] - meansClass.vec[i], 2);
     }
+    return d;
+}
+void classify()
+{
+    float correct = 0;
+    for(int i = 1; i < FILES; i++){
+        int Class = A;
+        long long min = dist(A, meansA, means[i]);
+        long long d = dist(B, meansB, means[i]);
+        if(d < min){
+            Class = B;
+            min = d;
+        }
+        d = dist(C, meansC, means[i]);
+        if(d < min){
+            Class = C;
+            min = d;
+        }
+        d = dist(D, meansD, means[i]);
+        if(d < min){
+            Class = D;
+            min = d;
+        }
+        if(Class == file_dic[i].file_Class){
+            correct++;
+
+        }
+        const string file_classify_name = File_classify_folder + to_string(i) + "b.txt";
+        ofstream of_class_name(file_classify_name, ofstream::out);
+        of_class_name << Class;
+        of_class_name.close();
+    }
+    correct /= (FILES - 1);
+    cout << "Correctness: " << correct << endl;
+    const string file_classify_name = File_classify_folder + "correctness.txt";
+    ofstream of_class_name(file_classify_name, ofstream::out);
+    of_class_name << correct;
+    of_class_name.close();
 }
