@@ -1,5 +1,5 @@
-#ifndef CREATE_DIC_H
-#define CREATE_DIC_H
+#ifndef UNSUPERVISE_H
+#define UNSUPERVISE_H
 
 #include <iostream>
 #include <string>

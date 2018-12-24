@@ -1,4 +1,4 @@
-#include "Create_Dic.h"
+#include "Unsupervise.h"
 #include <fstream>
 #include <algorithm>
 #include <math.h>
@@ -209,7 +209,7 @@ void classify()
             correct++;
 
         }
-        const string file_classify_name = File_classify_folder + to_string(i) + "b.txt";
+        const string file_classify_name = File_classify_folder + to_string(i) + "a.txt";
         ofstream of_class_name(file_classify_name, ofstream::out);
         of_class_name << Class;
         of_class_name.close();
