@@ -12,4 +12,4 @@
 ## Unsupervise
 - Use k-mean method
 ## Presentation
-- [hackmd](https://hackmd.io/qzljAd2zTE6Y2AvAzncG9g#)
+- [hackmd slide](https://hackmd.io/qzljAd2zTE6Y2AvAzncG9g#)
