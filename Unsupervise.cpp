@@ -91,10 +91,10 @@ void k_mean()
 {
     create_means();
     srand(time(NULL));
-    int a = rand()%(FILES - 1) + 1;
-    int b = rand()%(FILES - 1) + 1;
-    int c = rand()%(FILES - 1) + 1;
-    int d = rand()%(FILES - 1) + 1;
+    //int a = rand()%(FILES - 1) + 1;
+    //int b = rand()%(FILES - 1) + 1;
+    //int c = rand()%(FILES - 1) + 1;
+    //int d = rand()%(FILES - 1) + 1;
     meansA = means[13];  // 13
     meansB = means[4];   // 4
     meansC = means[1];   // 1
