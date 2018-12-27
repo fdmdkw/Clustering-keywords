@@ -13,3 +13,5 @@
 - Use k-means method
 ## Presentation
 - [hackmd slide](https://hackmd.io/qzljAd2zTE6Y2AvAzncG9g#)
+## Documentation
+- [hackmd documentation](https://hackmd.io/Qd9PzRWcTB663tJRlpqsaA#)
