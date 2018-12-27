@@ -4,7 +4,7 @@ all=[]
 lenth=[]
 x=1
 while(x<1001):
-    f=open("training\\training\\%d.txt" %x,'r')
+    f=open("training/training/%d.txt" %x,'r')
     line=f.readlines()
     for sub_string in line:
         sub_string=sub_string.rstrip('\n')
@@ -37,11 +37,11 @@ while(i<l):
         c+=1
     i+=1
 
-f=open("data\\Dictionary.txt",'w')
+f=open("data/Dictionary.txt",'w')
 for i in all:
     f.write(i.word+' '+str(i.times)+'\n')
 f.close()
-f=open("data\\article_len.txt",'w')
+f=open("data/article_len.txt",'w')
 for i in lenth:
     f.write(str(i)+'\n')
 f.close()

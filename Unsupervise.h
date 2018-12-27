@@ -42,8 +42,8 @@ extern int FILES;  // define files range, default as 1001(index 1~1000)
 const std::string Train_folder("./training/training文件/");
 const std::string Train_class_folder("./training/training文件種類/");
 const std::string Train_classify_folder("./training/unsupervise_classify/");
-const std::string Test_folder("./training/training文件/");
-const std::string Test_classify_folder("./training/test_classify/");
+const std::string Test_folder("./testing/");
+const std::string Test_classify_folder("./unsupervised_test_classify/");
 
 void create_dic(bool test_file);  // true -> create dictionary of test files, false -> training files
 void create_means();

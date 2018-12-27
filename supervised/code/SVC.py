@@ -4,7 +4,7 @@ t_data=[]
 x=1
 while x<1001:
     data=[]
-    f=open("training\\t_data\\%d.txt"%x,'r')
+    f=open("training/t_data/%d.txt"%x,'r')
     line=str(f.readline())
     line=line.rstrip(' ')
     freqs=line.split(' ')
@@ -16,14 +16,14 @@ while x<1001:
 t_class=[]
 x=1
 while x<1001:
-    f=open("training\\training文件種類\\%da.txt"%x,'r')
+    f=open("training/training文件種類/%da.txt"%x,'r')
     temp=f.read(1)
     t_class.append(temp)
     x+=1
     f.close()
 clf=svm.SVC()
 clf.fit(t_data,t_class)
-joblib.dump(clf,"C:\\Users\\eaixr\\Desktop\\train_model.m")
+joblib.dump(clf,"train_model.m")
 
 """X = [[0, 0], [1, 1],[1,0] ] # training samples   
 y = [0, 1,1]  # training target  

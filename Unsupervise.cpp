@@ -19,6 +19,8 @@ Means meansD;
 
 void create_dic(bool test_file)
 {
+    file_dic.clear();
+    file_dic.resize(FILES);
     for(int files = 1; files < FILES; files++){
         string file_name;
         if(!test_file)   // create dictionary of training files
@@ -209,6 +211,7 @@ void classify(bool test_file)
         
         ofstream of_class_name(file_classify_name, ofstream::out);
         of_class_name << Class;
+        cout << Class << endl;
         of_class_name.close();
     }
     correctness /= (FILES - 1);
@@ -216,6 +219,8 @@ void classify(bool test_file)
 }
 void create_means()
 {
+    means.clear();
+    means.resize(FILES);
     for(int i = 1; i < FILES; i++){
         for(auto it = term_dic.begin(); it != term_dic.end(); it++){
             if(file_dic[i].term_dic.find(it->first) != file_dic[i].term_dic.end()){  // found the term

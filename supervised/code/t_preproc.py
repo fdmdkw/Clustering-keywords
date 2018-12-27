@@ -9,7 +9,7 @@ x=1
 article=[] #每篇包含22個關鍵字權重
 while x<(f_number+1):  #計算權重
     weight=[] #各關鍵字權重
-    f=open("training\\training\\%d.txt"%x,'r') #路徑和x值根據文件位址和檔名
+    f=open("../../testing/%d.txt"%x,'r') #路徑和x值根據文件位址和檔名
     line=str(f.readline())
     #文章切割成單字(in voc)
     line=line.strip('\n')   
@@ -32,18 +32,18 @@ while x<(f_number+1):  #計算權重
     x+=1
 
 #預測
-clf=load("model\\train_model.m")
+clf=load("model/train_model.m")
 res=clf.predict(article)
 #答案存成陣列
+"""
 answer=[]
 x=1
 while x<(f_number+1):   
-    f=open("training\\training文件種類\\%da.txt"%x,'r')
+    f=open("training/training文件種類/%da.txt"%x,'r')
     temp=f.read(1)
     answer.append(temp)
     x+=1
     f.close()
-
 #準確度計算
 x=0
 correct=0
@@ -52,9 +52,11 @@ while(x<f_number):
         correct=correct+1
     x=x+1
 print(str((correct/f_number)*100)+'%')
+"""
 x=1
 while x<(f_number+1):
-    f=open("data\\output\\%da.txt"%x,'w')
+    f=open("../../supervised_test_classify/%da.txt"%x,'w')
     f.write(res[x-1])
+    print(res[x-1])
     f.close()
     x=x+1

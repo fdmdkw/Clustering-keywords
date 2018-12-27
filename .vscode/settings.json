@@ -38,5 +38,6 @@
         "string_view": "cpp",
         "algorithm": "cpp",
         "deque": "cpp"
-    }
+    },
+    "python.pythonPath": "/home/linuxbrew/.linuxbrew/bin/python3"
 }
