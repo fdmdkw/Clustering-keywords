@@ -10,6 +10,6 @@
     - [English Spell Checker Dictionaries](http://wordlist.aspell.net/dicts/)
     - C++
 ## Unsupervise
-- Use k-mean method
+- Use k-means method
 ## Presentation
 - [hackmd slide](https://hackmd.io/qzljAd2zTE6Y2AvAzncG9g#)
